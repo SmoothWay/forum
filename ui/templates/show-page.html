@@ -1,0 +1,19 @@
+{{template "base" .}}
+
+{{define "title"}}Post #{{.Post.ID}}{{end}}
+
+{{define "body"}}
+
+{{with .Post}}
+<div class="snippet">
+    <div class="metadata">
+        <strong>{{.Title}}</strong>
+        <span>#{{.ID}}</span>
+    </div>
+    <pre><code>{{.Content}}</code></pre>
+    <div class="metadata">
+        <pre>{{.Created}}</pre>
+    </div>
+</div>
+{{end}}
+{{end}}

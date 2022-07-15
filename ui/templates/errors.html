@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="../static/css/errors.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="../static/favicon-32x32.png">
+    <title>Error</title>
+</head>
+<body>
+    {{if eq . 400}}
+    <p>400 Bad Request</p>
+    {{ else if eq . 404}}
+    <p>404 Not Found</p>
+    {{ else if eq . 405}}
+    <p>405 Method Not Allowed</p>
+    {{ else if eq . 500}}
+    <p>500 Internal Server Error</p>
+    
+    {{end}}
+    <a href="/">Main Page</a>
+</body>
+</html>
