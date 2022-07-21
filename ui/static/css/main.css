@@ -223,6 +223,7 @@ form label {
 }
 
 textarea {
+    box-sizing: border-box;
     padding: 18px;
     width: 100%;
     height: 266px;

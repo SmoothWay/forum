@@ -44,6 +44,7 @@ func (m *PostModel) Get(id int) (*models.Post, error) {
 	stmt3 := `SELECT comments.content, users.nickname 
 			FROM comments JOIN users 
 			ON comments.userid = users.id 
+			WHERE comments.postid = ?
 			ORDER BY comments.id`
 	// Extracting post
 
