@@ -16,7 +16,9 @@ func (s *Session) GetUserByUUID(uuid string) (*models.User, error) {
 	user := models.User{}
 	row := s.DB.QueryRow(stmt, uuid)
 	err := row.Scan(&user.ID)
-	if err != nil {
+	if err == sql.ErrNoRows {
+		return nil, models.ErrNoRecord
+	} else if err != nil {
 		return nil, err
 	}
 	stmt2 := `SELECT nickname, email, hashed_password FROM users WHERE id = ?`
@@ -25,7 +27,9 @@ func (s *Session) GetUserByUUID(uuid string) (*models.User, error) {
 
 	row2 := s.DB.QueryRow(stmt2, user.ID)
 	err = row2.Scan(&user2.Nickname, &user2.Email, &user2.HashedPassword)
-	if err != nil {
+	if err == sql.ErrNoRows {
+		return nil, models.ErrNoRecord
+	} else if err != nil {
 		return nil, err
 	}
 
@@ -37,7 +41,8 @@ func (s *Session) GetUserByUUID(uuid string) (*models.User, error) {
 func (s *Session) Insert(userID int, uuid string) error {
 	stmt := `INSERT INTO sessions(uuid, expires, userid)
 			VALUES(?, ?, ?)`
-	_, err := s.DB.Exec(stmt, uuid, time.Now().Format("01-02-2006 15:04:05"), userID)
+	now := time.Now().Add(time.Hour * 3).Format("01-02-2006 15:04:05")
+	_, err := s.DB.Exec(stmt, uuid, now, userID)
 	if err != nil {
 		return err
 	}

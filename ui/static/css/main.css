@@ -144,7 +144,7 @@ nav a.live:after {
 }
 
 a.button, input[type="submit"] {
-    background-color: #62CB31;
+    background-color: #313131;
     border-radius: 3px;
     color: #FFFFFF;
     padding: 18px 27px;
@@ -155,7 +155,7 @@ a.button, input[type="submit"] {
 }
 
 a.button:hover, input[type="submit"]:hover {
-    background-color: #4EB722;
+    background-color: #0f0f0f;
     color: #FFFFFF;
     cursor: pointer;
     text-decoration: none;
@@ -191,7 +191,6 @@ form label {
     display: inline-block;
     margin-bottom: 9px;
 }
-
 .error {
     color: #C0392B;
     font-weight: bold;
@@ -201,6 +200,26 @@ form label {
 .error + textarea, .error + input {
     border-color: #C0392B !important;
     border-width: 2px !important;
+}
+
+.errorhtml{
+    background-size: 4500px 2500px;
+    text-align: center;
+    position: relative;
+    font-family: monospace;
+    color: #313131
+}
+.errorhtml p{
+    font-size: 90px;
+}
+.errorhtml a{
+    font-size: 50px;
+    color: #af4c41;
+}
+
+.errorhtml a:hover{
+    font-size: 52px;
+    color: #cc483a;
 }
 
 textarea {
@@ -213,52 +232,98 @@ button {
     background: none;
     padding: 0;
     border: none;
-    color: #62CB31;
+    color: #e0dbdb;
     text-decoration: none;
 }
 
 button:hover {
-    color: #4EB722;
+    color: #ffffff;
     text-decoration: underline;
     cursor: pointer;
 }
+.content {
+    border-left: 4px solid #b9b9b9;
+    font-size: 16px;
+    padding: 12px;
+    background-color: #56686529;
+    min-height: 85px;
+}
 
-.snippet {
+.add_comment textarea {
+    margin-top: 10px;
+    width: 100%;
+    height: 150px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    resize: none;
+}
+
+.evaluate button:first-child{
+    background-color: #289628;
+}
+
+.evaluate button:first-child:hover{
+    background-color: #03b903;
+}
+
+.evaluate button{
+    background-color: #b11d1d;
+}
+
+
+.evaluate button:hover{
+    background-color: #cf0808;
+}
+
+.post {
     background-color: #FFFFFF;
     border: 1px solid #E4E5E7;
     border-radius: 3px;
 }
+.post p{
+    display: inline-block;
+    text-align: center;
+    border: 2px solid #313131;
+    padding: 2px ;
+}
 
-.snippet pre {
+.Icon:first-child{
+    margin-left: 18px;
+}
+
+.post pre {
     padding: 18px;
     border-top: 1px solid #E4E5E7;
     border-bottom: 1px solid #E4E5E7;
 }
 
-.snippet .metadata {
+.post .metadata {
     background-color: #F7F9FA;
     color: #6A6C6F;
     padding: 0.75em 18px;
     overflow: auto;
 }
 
-.snippet .metadata span {
+.post .metadata span {
     float: right;
 }
 
-.snippet .metadata strong {
+.post .metadata strong {
     color: #34495E;
 }
 
-.snippet .metadata time {
+.post .metadata time {
     display: inline-block;
 }
 
-.snippet .metadata time:first-child {
+.post .metadata time:first-child {
     float: left;
 }
 
-.snippet .metadata time:last-child {
+.post .metadata time:last-child {
     float: right;
 }
 

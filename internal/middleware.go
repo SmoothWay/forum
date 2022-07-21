@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 func (app *Application) requireAuthenticatedUser(next http.HandlerFunc) http.Handler {
@@ -25,8 +26,9 @@ func (app *Application) secureHeaders(next http.Handler) http.Handler {
 
 func (app *Application) logRequest(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		app.InfoLog.Printf("%s - %s %s %s", r.RemoteAddr, r.Proto, r.Method, r.URL)
-
+		if !strings.Contains(fmt.Sprint(r.URL), "/static") {
+			app.InfoLog.Printf("%s - %s %s %s", r.RemoteAddr, r.Proto, r.Method, r.URL)
+		}
 		next.ServeHTTP(w, r)
 	})
 }

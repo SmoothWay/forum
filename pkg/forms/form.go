@@ -52,6 +52,22 @@ func (f *Form) Required(fields ...string) {
 	}
 }
 
+func (f *Form) TagField(field []string, l int) {
+	letterLen := 20
+	if l == 0 {
+		return
+	}
+	for _, v := range field {
+		if utf8.RuneCountInString(v) > letterLen {
+			f.Errors.Add("categories", fmt.Sprintf("This filed contains too long tag (maximum is %d letters)", letterLen))
+			return
+		}
+	}
+	if l > 5 {
+		f.Errors.Add("categories", "Maximum 5 tags can be added")
+	}
+}
+
 func (f *Form) MaxLength(field string, d int) {
 	value := f.Get(field)
 	if value == "" {

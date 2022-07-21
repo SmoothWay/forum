@@ -22,13 +22,15 @@ type User struct {
 }
 
 type Post struct {
-	ID       int
-	Title    string
-	Content  string
-	Created  string
-	Category *Category
-	User     *User
-	Comments []Comment
+	ID         int
+	Like       int
+	Dislike    int
+	Title      string
+	Content    string
+	Created    string
+	Categories []string
+	User       *User
+	Comments   []Comment
 }
 
 type Category struct {
@@ -37,9 +39,8 @@ type Category struct {
 }
 
 type Comment struct {
-	ID      int
-	Content string
-	User    *User
+	Content  string
+	Nickname string
 }
 
 type Session struct {

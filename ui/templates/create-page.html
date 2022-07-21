@@ -1,6 +1,6 @@
 {{template "base" .}}
 
-{{define "title"}}Create a New Snippet{{end}}
+{{define "title"}}Create a New Post{{end}}
 
 {{define "body"}}
 
@@ -27,7 +27,7 @@
         {{with .Errors.Get "categories"}}
         <label class="error">{{.}}</label>
         {{end}}
-        <input type="text" name="tags" placeholder="gRPC, REST API">
+        <input type="text" name="categories" placeholder="gRPC, REST API (max 5 tags)">
 
     </div>
     <div>

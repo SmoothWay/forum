@@ -5,15 +5,47 @@
 {{define "body"}}
 
 {{with .Post}}
-<div class="snippet">
+<div class="post">
     <div class="metadata">
         <strong>{{.Title}}</strong>
         <span>#{{.ID}}</span>
     </div>
     <pre><code>{{.Content}}</code></pre>
-    <div class="metadata">
-        <pre>{{.Created}}</pre>
+    <div class="eachtag">
+    {{range .Categories}}
+    <p class="Icon">{{.}}</p>
+    {{end}}
     </div>
+    <div class="metadata">
+        <pre>Created: {{.Created}}</pre>
+    </div>
+    <form method="POST" action="/post?id={{.ID}}">
+        <div class="evaluate">
+            <button class="btn" type="submit" name="vote" value="1">Like</button>
+            {{.Like}}
+            <button class="btn" type="submit" name="vote" value="-1">Dislike</button>
+            {{.Dislike}}
+        </div>
+    </form>
+</div>
+
+<div class="posted_comments">
+    {{range .Comments}}
+        <hr>
+        <div class="content">
+            Author: {{.Nickname}}
+            <br>
+            {{.Content}}</div>
+        <br>
+    {{end}}
+</div>
+<div class="add_comment">
+    <form method="POST" action="/post?id={{.ID}}">
+        <textarea  name="comment" 
+        placeholder="Type your comment here" ></textarea>
+        <br> 
+        <input type="submit" value="Add comment">
+    </form>
 </div>
 {{end}}
 {{end}}

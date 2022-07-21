@@ -7,6 +7,9 @@ import (
 	"net/http"
 	"runtime/debug"
 	"time"
+
+	"github.com/SmoothWay/forum/pkg/forms"
+	"github.com/SmoothWay/forum/pkg/models"
 )
 
 func (app *Application) authenticatedUser(r *http.Request) int {
@@ -37,6 +40,28 @@ func (app *Application) render(w http.ResponseWriter, r *http.Request, name stri
 		return
 	}
 	buf.WriteTo(w)
+}
+
+func (app *Application) vote(userid, postid int, formVote string, form *forms.Form) error {
+	vote, err := app.Posts.IsVoted(userid, postid)
+	if err == models.ErrNoRecord {
+		err = app.Posts.InsertPostEvaluate(userid, postid, formVote)
+		if err != nil {
+			return err
+		}
+	} else if err != nil {
+		return err
+	}
+	if vote != formVote {
+		app.Posts.DelPostVote(userid, postid)
+		err = app.Posts.InsertPostEvaluate(userid, postid, formVote)
+		if err != nil {
+			return err
+		}
+	} else {
+		app.Posts.DelPostVote(userid, postid)
+	}
+	return nil
 }
 
 func (app *Application) execTemp(w http.ResponseWriter, status int) {
