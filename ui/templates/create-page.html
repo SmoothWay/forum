@@ -19,7 +19,7 @@
         {{with .Errors.Get "content"}}
         <label class="error">{{.}}</label>
         {{end}}
-        <textarea name="content">{{.Get "content"}}</textarea>
+        <textarea cols="20" wrap="hard" name="content">{{.Get "content"}}</textarea>
        
     </div>
     <div>

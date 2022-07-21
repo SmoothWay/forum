@@ -223,6 +223,7 @@ form label {
 }
 
 textarea {
+    resize:none;
     box-sizing: border-box;
     padding: 18px;
     width: 100%;
@@ -264,6 +265,7 @@ button:hover {
 
 .evaluate button:first-child{
     background-color: #289628;
+    margin-left: 18px;
 }
 
 .evaluate button:first-child:hover{
@@ -296,6 +298,7 @@ button:hover {
 }
 
 .post pre {
+    max-width: 798;
     padding: 18px;
     border-top: 1px solid #E4E5E7;
     border-bottom: 1px solid #E4E5E7;
