@@ -10,13 +10,18 @@ Subject from [01 School](https://github.com/01-edu/public/tree/master/subjects/f
 ## Usage: how to run?  
 Clone this repository to your local machine. 
 ```shell
-cd forum``` 
+cd forum
+``` 
 and type 
 ```shell
 go run ./cmd/web
 ```  
 Or you can specify port with flag `-addr`.  
-Example: `go run ./cmd/web -addr=:4000`. After you can visit `http://localhost:$PORT`.
+Example: 
+```shell
+go run ./cmd/web -addr=:4000
+```
+After you can visit `http://localhost:$PORT`.
 
 ## Implementation  
 Project is still on developing stage.
