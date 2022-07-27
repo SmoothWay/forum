@@ -1,51 +1,99 @@
 package internal
 
 import (
+	"fmt"
 	"net/http"
+	"sync"
+	"time"
 
 	uuid "github.com/satori/go.uuid"
 )
 
-func (app *Application) AddSession(w http.ResponseWriter, r *http.Request, id int) {
-	u := uuid.NewV4()
+var cookie sync.Map
 
-	app.Session.Insert(id, u.String())
+const CookieName string = "forum"
+
+type duration struct {
+	expiry map[interface{}]time.Time
+	mu     sync.Mutex
+}
+
+var sessionDuration = duration{expiry: make(map[interface{}]time.Time)}
+
+func AddCookie(w http.ResponseWriter, r *http.Request, id int) {
+	sessionDuration.mu.Lock()
+	defer sessionDuration.mu.Unlock()
+
+	u := uuid.NewV4().String()
+	deleteExistingCookie(id, u)
+
+	cookie.Store(u, id)
+	expire := time.Now().AddDate(0, 0, 1)
+	sessionDuration.expiry[u] = expire
+
 	http.SetCookie(w,
 		&http.Cookie{
-			Name:   "forum",
-			Value:  u.String(),
-			MaxAge: 1800,
-			Path:   "/",
+			Name:     CookieName,
+			Value:    u,
+			Path:     "/",
+			HttpOnly: true,
+			Expires:  expire,
 		})
 }
 
-func (app *Application) GetSession(r *http.Request) int {
-	s, err := r.Cookie("forum")
-	if err != nil {
-		return 0
-	}
-	u, err := app.Session.GetUserByUUID(s.Value)
-	if err != nil {
-		return 0
-	}
-	err = app.Session.Exists(u.ID)
-	if err != nil {
-		return 0
-	}
-	return u.ID
+func DeleteCookie(w http.ResponseWriter, r *http.Request) {
+	c, _ := r.Cookie(CookieName)
+	http.SetCookie(w, &http.Cookie{
+		Name:     CookieName,
+		Value:    "",
+		Path:     "/",
+		HttpOnly: true,
+		Expires:  time.Unix(0, 0),
+	})
+	cookie.Delete(c.Value)
 }
 
-func (app *Application) RemoveSession(w http.ResponseWriter, r *http.Request) error {
-	c, _ := r.Cookie("forum")
-	u, err := app.Session.GetUserByUUID(c.Value)
-	if err != nil {
-		return err
-	}
-	app.Session.Delete(u.ID)
-	http.SetCookie(w, &http.Cookie{
-		Name:   "forum",
-		Value:  "",
-		MaxAge: -1,
+func deleteExistingCookie(id int, uuid string) {
+	cookie.Range(func(key, value interface{}) bool {
+		if id == value.(int) {
+			cookie.Delete(key)
+		}
+		return true
 	})
-	return nil
+}
+
+func isSession(r *http.Request) bool {
+	c, err := r.Cookie(CookieName)
+	if err != nil {
+		return false
+	}
+	_, ok := cookie.Load(c.Value)
+	return ok
+}
+
+func GetUserIDByCookie(r *http.Request) (int, error) {
+	c, err := r.Cookie(CookieName)
+	if err != nil {
+		return 0, err
+	}
+	value, ok := cookie.Load(c.Value)
+	if !ok {
+		return 0, fmt.Errorf("getUserIDByCookie: cannot load value from cookie store")
+	}
+	userID := value.(int)
+	return userID, nil
+}
+
+func DeleteExpiredSession() {
+	for {
+		cookie.Range(func(key, value interface{}) bool {
+			sessionDuration.mu.Lock()
+			if time.Now().Unix() > sessionDuration.expiry[key].Unix() {
+				cookie.Delete(key)
+			}
+			sessionDuration.mu.Unlock()
+			return true
+		})
+		time.Sleep(time.Second * 5)
+	}
 }

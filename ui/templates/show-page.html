@@ -10,23 +10,25 @@
         <strong>{{.Title}}</strong>
         <span>#{{.ID}}</span>
     </div>
-    <pre><code>{{.Content}}</code></pre>
+    <pre>{{.Content}}</pre>
     <div class="eachtag">
     {{range .Categories}}
     <p class="Icon">{{.}}</p>
     {{end}}
     </div>
     <div class="metadata">
-        <pre>Created: {{.Created}}</pre>
+        <p>Created: {{.Created}}</p>
     </div>
-    <form method="POST" action="/post?id={{.ID}}">
-        <div class="evaluate">
+    <div class="evaluate">
+    <form method="POST" action="/post/vote?id={{.ID}}&vote=1">
             <button class="btn" type="submit" name="vote" value="1">Like</button>
             {{.Like}}
-            <button class="btn" type="submit" name="vote" value="-1">Dislike</button>
-            {{.Dislike}}
-        </div>
     </form>
+        <form method="POST" action="/post/vote?id={{.ID}}&vote=-1">
+             <button class="btn" type="submit" name="vote" value="-1">Dislike</button>
+            {{.Dislike}}
+    </form>
+    </div>
 </div>
 
 <div class="posted_comments">

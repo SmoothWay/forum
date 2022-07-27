@@ -10,7 +10,7 @@ import (
 )
 
 type TemplateData struct {
-	AuthenticatedUser int
+	AuthenticatedUser bool
 	CurrentYear       int
 	Flash             string
 	Form              *forms.Form

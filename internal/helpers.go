@@ -8,12 +8,11 @@ import (
 	"runtime/debug"
 	"time"
 
-	"github.com/SmoothWay/forum/pkg/forms"
 	"github.com/SmoothWay/forum/pkg/models"
 )
 
-func (app *Application) authenticatedUser(r *http.Request) int {
-	return app.GetSession(r)
+func (app *Application) authenticatedUser(r *http.Request) bool {
+	return isSession(r)
 }
 
 func (app *Application) addDefaultData(td *TemplateData, r *http.Request) *TemplateData {
@@ -42,8 +41,8 @@ func (app *Application) render(w http.ResponseWriter, r *http.Request, name stri
 	buf.WriteTo(w)
 }
 
-func (app *Application) vote(userid, postid int, formVote string, form *forms.Form) error {
-	vote, err := app.Posts.IsVoted(userid, postid)
+func (app *Application) postVote(userid, postid int, formVote int) error {
+	vote, err := app.Posts.IsVotedPost(userid, postid)
 	if err == models.ErrNoRecord {
 		err = app.Posts.InsertPostEvaluate(userid, postid, formVote)
 		if err != nil {
@@ -63,7 +62,27 @@ func (app *Application) vote(userid, postid int, formVote string, form *forms.Fo
 	}
 	return nil
 }
-
+func (app *Application) commentVote(userid, commentID, formVote int) error {
+	vote, err := app.Posts.IsVotedComment(userid, commentID)
+	if err == models.ErrNoRecord {
+		err = app.Posts.InsertCommentEvaluate(userid, commentID, formVote)
+		if err != nil {
+			return err
+		}
+	} else if err != nil {
+		return err
+	}
+	if vote != formVote {
+		app.Posts.DelCommentVote(userid, commentID)
+		err = app.Posts.InsertCommentEvaluate(userid, commentID, formVote)
+		if err != nil {
+			return err
+		}
+	} else {
+		app.Posts.DelPostVote(userid, commentID)
+	}
+	return nil
+}
 func (app *Application) execTemp(w http.ResponseWriter, status int) {
 	templates, templErr := template.ParseFiles("./ui/templates/errors.html")
 	if templErr != nil {

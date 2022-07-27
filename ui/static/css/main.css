@@ -268,7 +268,7 @@ button:hover {
     margin-left: 18px;
 }
 
-.evaluate button:first-child:hover{
+.evaluate form:first-child:hover{
     background-color: #03b903;
 }
 
@@ -287,6 +287,8 @@ button:hover {
     border-radius: 3px;
 }
 .post p{
+    word-break: break-all;
+    white-space: pre-wrap;
     display: inline-block;
     text-align: center;
     border: 2px solid #313131;

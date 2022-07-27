@@ -15,12 +15,12 @@
     <nav>
         <div>
         <a href="/">Home</a>
-        {{if .AuthenticatedUser}}
+        {{if eq .AuthenticatedUser true}}
         <a href="/post/create">Create Post</a>
         {{end}}
         </div> 
         <div>
-        {{if .AuthenticatedUser}}
+        {{if eq .AuthenticatedUser true}}
         <form action="user/logout" method="POST">
             <button>Logout</button>
         </form>

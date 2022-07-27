@@ -8,7 +8,7 @@ import (
 
 func (app *Application) requireAuthenticatedUser(next http.HandlerFunc) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if app.authenticatedUser(r) == 0 {
+		if !app.authenticatedUser(r) {
 			http.Redirect(w, r, "/user/login", http.StatusFound)
 		}
 		next.ServeHTTP(w, r)
