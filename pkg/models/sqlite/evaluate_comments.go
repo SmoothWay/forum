@@ -2,6 +2,7 @@ package sqlite
 
 import (
 	"database/sql"
+	"log"
 
 	"github.com/SmoothWay/forum/pkg/models"
 )
@@ -67,4 +68,36 @@ func (m *PostModel) GetCommentEvaluate(commentID int) (int, int, error) {
 	}
 
 	return like, dislike, nil
+}
+
+func (u *PostModel) GetVotesCountByCommentID(commentID int64) (*models.Comment, error) {
+	rows, err := u.DB.Query(`SELECT "vote", count("vote") 
+			FROM "comments_evaluate"
+			WHERE commentid = ? 
+			GROUP BY "vote"
+			ORDER BY "vote" desc`, commentID)
+	if err != nil {
+		return nil, err
+	}
+	votes := &models.Comment{
+		Like:    0,
+		Dislike: 0,
+	}
+	for rows.Next() {
+		var voteType int64
+		var cnt int64
+		err := rows.Scan(&voteType, &cnt)
+		if err != nil {
+			return nil, err
+		}
+		switch voteType {
+		case 1:
+			votes.Like = uint64(cnt)
+		case -1:
+			votes.Dislike = uint64(cnt)
+		default:
+			log.Println("Get Votes count bug:", voteType, cnt)
+		}
+	}
+	return votes, nil
 }

@@ -13,6 +13,7 @@ func (app *Application) Routes() http.Handler {
 	mux.Handle("/user/logout", app.requireAuthenticatedUser((app.logoutUser)))
 
 	mux.Handle("/post/vote", app.requireAuthenticatedUser(app.votePost))
+	mux.Handle("/post/createcomment", app.requireAuthenticatedUser(app.createComment))
 	mux.Handle("/post/create", app.requireAuthenticatedUser((app.createPost)))
 	mux.Handle("/post/votecomment", app.requireAuthenticatedUser(app.voteComment))
 

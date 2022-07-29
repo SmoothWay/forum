@@ -286,8 +286,7 @@ button:hover {
     border: 1px solid #E4E5E7;
     border-radius: 3px;
 }
-.post p{
-    word-break: break-all;
+.Icon{
     white-space: pre-wrap;
     display: inline-block;
     text-align: center;
@@ -299,7 +298,7 @@ button:hover {
     margin-left: 18px;
 }
 
-.post pre {
+.area{
     max-width: 798;
     padding: 18px;
     border-top: 1px solid #E4E5E7;

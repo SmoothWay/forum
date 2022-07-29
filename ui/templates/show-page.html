@@ -10,7 +10,7 @@
         <strong>{{.Title}}</strong>
         <span>#{{.ID}}</span>
     </div>
-    <pre>{{.Content}}</pre>
+    <p class="area" style="word-wrap:break-word;">{{.Content}}</p>
     <div class="eachtag">
     {{range .Categories}}
     <p class="Icon">{{.}}</p>
@@ -39,12 +39,22 @@
             <br>
             {{.Content}}</div>
         <br>
+        <div class="evaluate">
+            <form method="POST" action="/post/votecomment?id={{.ID}}&vote=1">
+                    <button class="btn" type="submit" name="vote" value="1">Like</button>
+                    {{.Like}}
+            </form>
+                <form method="POST" action="/post/votecomment?id={{.ID}}&vote=-1">
+                     <button class="btn" type="submit" name="vote" value="-1">Dislike</button>
+                    {{.Dislike}}
+            </form>
+            </div>
     {{end}}
 </div>
 <div class="add_comment">
-    <form method="POST" action="/post?id={{.ID}}">
+    <form method="POST" action="/post/createcomment?id={{.ID}}">
         <textarea  name="comment" 
-        placeholder="Type your comment here" ></textarea>
+        placeholder="Type your comment here" required></textarea>
         <br> 
         <input type="submit" value="Add comment">
     </form>

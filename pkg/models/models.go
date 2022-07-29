@@ -28,8 +28,8 @@ type Post struct {
 	Title      string
 	Content    string
 	Created    string
-	Categories []string
 	User       *User
+	Categories []string
 	Comments   []Comment
 }
 
@@ -39,6 +39,8 @@ type Category struct {
 }
 
 type Comment struct {
+	Like     uint64
+	Dislike  uint64
 	Content  string
 	Nickname string
 }
