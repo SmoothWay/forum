@@ -30,7 +30,7 @@
     </form>
     </div>
 </div>
-
+{{end}}
 <div class="posted_comments">
     {{range .Comments}}
         <hr>
@@ -40,11 +40,11 @@
             {{.Content}}</div>
         <br>
         <div class="evaluate">
-            <form method="POST" action="/post/votecomment?id={{.ID}}&vote=1">
+            <form method="POST" action="/post/votecomment?id={{.PostID}}&vote=1&comm={{.ID}}">
                     <button class="btn" type="submit" name="vote" value="1">Like</button>
                     {{.Like}}
             </form>
-                <form method="POST" action="/post/votecomment?id={{.ID}}&vote=-1">
+                <form method="POST" action="/post/votecomment?id={{.PostID}}&vote=-1&comm={{.ID}}">
                      <button class="btn" type="submit" name="vote" value="-1">Dislike</button>
                     {{.Dislike}}
             </form>
@@ -52,12 +52,11 @@
     {{end}}
 </div>
 <div class="add_comment">
-    <form method="POST" action="/post/createcomment?id={{.ID}}">
+    <form method="POST" action="/post/createcomment?id={{.Post.ID}}">
         <textarea  name="comment" 
         placeholder="Type your comment here" required></textarea>
         <br> 
         <input type="submit" value="Add comment">
     </form>
 </div>
-{{end}}
 {{end}}

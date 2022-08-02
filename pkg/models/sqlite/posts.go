@@ -41,11 +41,7 @@ func (m *PostModel) Get(id int) (*models.Post, error) {
 	stmt2 := `SELECT name
 			FROM category
 			WHERE id = $1`
-	stmt3 := `SELECT comments.content, users.nickname 
-			FROM comments JOIN users 
-			ON comments.userid = users.id 
-			WHERE comments.postid = ?
-			ORDER BY comments.id`
+
 	// Extracting post
 
 	err := m.DB.QueryRow(stmt, id).Scan(&Post.ID, &Post.Title, &Post.Content, &Post.Created)
@@ -69,19 +65,6 @@ func (m *PostModel) Get(id int) (*models.Post, error) {
 		Post.Categories = append(Post.Categories, tag)
 	}
 	// Extracting comments
-	rows, err = m.DB.Query(stmt3, Post.ID)
-	if err != nil {
-		return nil, err
-	}
-
-	c := models.Comment{}
-	for rows.Next() {
-		err = rows.Scan(&c.Content, &c.Nickname)
-		if err != nil {
-			return nil, err
-		}
-		Post.Comments = append(Post.Comments, c)
-	}
 
 	// Extracting post evaluations
 	like, dislike, err := m.GetPostEvaluate(Post.ID)

@@ -15,7 +15,9 @@ type TemplateData struct {
 	Flash             string
 	Form              *forms.Form
 	Post              *models.Post
-	Posts             []*models.Post
+	// User              *models.User
+	Posts    []*models.Post
+	Comments []*models.Comment
 }
 
 func humanDate(t time.Time) string {

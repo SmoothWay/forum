@@ -39,8 +39,10 @@ type Category struct {
 }
 
 type Comment struct {
+	ID       int
 	Like     uint64
 	Dislike  uint64
+	PostID   int
 	Content  string
 	Nickname string
 }
@@ -48,6 +50,6 @@ type Comment struct {
 type Session struct {
 	ID      int
 	UUID    string
-	Expires time.Time
 	UserID  int
+	Expires time.Time
 }

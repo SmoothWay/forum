@@ -54,7 +54,7 @@ func (app *Application) showPost(w http.ResponseWriter, r *http.Request) {
 			app.notFound(w)
 			return
 		}
-		s, err := app.Posts.Get(postid)
+		post, err := app.Posts.Get(postid)
 		if err == models.ErrNoRecord {
 			app.notFound(w)
 			return
@@ -62,8 +62,27 @@ func (app *Application) showPost(w http.ResponseWriter, r *http.Request) {
 			app.serverError(w, err)
 			return
 		}
+
+		comments, err := app.GetCommentsByPostID(postid)
+		if err != nil {
+			app.serverError(w, err)
+			return
+		}
+		user := &models.User{}
+		if isSession(r) {
+			user.ID, err = GetUserIDByCookie(r)
+			if err != nil {
+				if err == http.ErrNoCookie {
+					http.Redirect(w, r, "/user/login", http.StatusUnauthorized)
+					return
+				}
+				app.clientError(w, http.StatusBadRequest)
+				return
+			}
+		}
 		app.render(w, r, "show-page.html", &TemplateData{
-			Post: s,
+			Post:     post,
+			Comments: comments,
 		})
 	} else {
 		w.Header().Set("Allow", http.MethodGet)
